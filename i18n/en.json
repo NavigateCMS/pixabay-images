@@ -1,0 +1,14 @@
+{
+  "pixabay_images": "Pixabay Images",
+  "apikey": "API Key",
+  "popular": "Popular",
+  "latest": "Latest",
+  "photos": "Photos",
+  "vectors": "Vectors",
+  "illustrations": "Illustrations",
+  "horizontal": "Horizontal",
+  "vertical": "Vertical",
+  "search_placeholder": "Search for &quot;red roses&quot;, &quot;flowers -red&quot;, &quot;city OR town&quot;, etc.",
+  "download_error": "Sorry, there has been a problem downloading the image.",
+  "apikey_missing": "Pixabay API Key missing. <br /><br />Please go to this extension settings and enter your key."
+}

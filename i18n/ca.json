@@ -1,0 +1,14 @@
+{
+  "pixabay_images": "Imatges de Pixabay",
+  "apikey": "Clau API",
+  "popular": "Popularitat",
+  "latest": "Més recents",
+  "photos": "Fotos",
+  "vectors": "Vectors",
+  "illustrations": "Il·lustracions",
+  "horizontal": "Horizontals",
+  "vertical": "Verticals",
+  "search_placeholder": "Cerca &quot;red roses&quot;, &quot;flowers -red&quot;, &quot;city OR town&quot;, etc.",
+  "download_error": "Ho sento, hi ha hagut un problema descarregant la imatge.",
+  "apikey_missing": "Falta la clau API de Pixabay. <br /><br />Si us plau, ves als ajustos de l'extensió i introdueix la clau."
+}

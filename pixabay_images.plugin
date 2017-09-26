@@ -1,0 +1,33 @@
+{
+  "title": "Pixabay images",
+  "version": "1.0",
+  "author": "Naviwebs",
+  "website": "http://www.naviwebs.com",
+  "description": "Get public domain pictures from Pixabay to be used for free in your website",
+  "type": "admin",
+  "run": true,
+  "languages":
+  {
+      "en": "i18n/en.json",
+      "es": "i18n/es.json",
+      "ca": "i18n/ca.json"
+  },
+  "options":
+  [
+      {
+          "id": "apikey",
+          "name": "API Key",
+          "type": "value",
+          "dvalue": "",
+          "helper": "Get your Pixabay API Key here: <a href='https://pixabay.com/api/docs/' target='_blank'>https://pixabay.com/api/docs/</a>"
+      }
+  ],
+  "bindings":
+  [
+      {
+        "module": "items",
+        "event": "actions",
+        "function": "navigate_pixabay_images_dialog"
+      }
+  ]
+}

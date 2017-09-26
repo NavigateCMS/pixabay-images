@@ -1,0 +1,14 @@
+{
+  "pixabay_images": "Imágenes de Pixabay",
+  "apikey": "Clave API",
+  "popular": "Popularidad",
+  "latest": "Más recientes",
+  "photos": "Fotos",
+  "vectors": "Vectores",
+  "illustrations": "Ilustraciones",
+  "horizontal": "Horizontales",
+  "vertical": "Verticales",
+  "search_placeholder": "Busca &quot;rosas rojas&quot;, &quot;flores -rojas&quot;, &quot;ciudad OR pueblo&quot;, etc.",
+  "download_error": "Lo siento, ha habido un problema descargando la imagen.",
+  "apikey_missing": "Falta la clave API de Pixabay. <br /><br />Por favor, ve a los ajustes de la extensión e introduce la clave."
+}
