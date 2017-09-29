@@ -1,4 +1,4 @@
-# Pixabay Images (for Navigate CMS)
+# Pixabay Images (Extension for Navigate CMS)
 
 Get public domain pictures from Pixabay to be used for free in your website managed with Navigate CMS.
 
@@ -20,10 +20,14 @@ Just create a pull request and we'll review your proposed changes.
 
 ## Authors
 
-* **Marc Lobato (CoolWind)** - [NavigateCMS](https://github.com/NavigateCMS)
+* **Marc Lobato** - [CoolWind](https://github.com/CoolWind)
 
 See also the list of [contributors](https://github.com/NavigateCMS/pixabay-images/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the GPLv2 License - see the [LICENSE](LICENSE) file for details
+
+## Built for Navigate CMS
+
+http://www.navigatecms.com
