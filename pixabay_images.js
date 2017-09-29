@@ -121,7 +121,8 @@ function navigate_pixabay_images_onload(editor_id)
                         {
                             var that = this;
                             $(this).parent().find(".ui-dialog-buttonset > button:first")
-                                .addClass("ui-state-disabled");
+                                .addClass("ui-state-disabled")
+                                .effect("pulsate", {times: 16}, 7600);
 
                             $.post(
                                 "?fid=ext_pixabay_images&mode=json&oper=download",
@@ -228,6 +229,11 @@ function navigate_pixabay_images_request()
             for(i in data.hits)
             {
                 var img = data.hits[i];
+
+                // high resolution compatibility
+                if(img.id_hash)
+                    img.id = img.id_hash;
+
                 var scaled_width = Math.floor((img.previewWidth / img.previewHeight) * navigate_pixabay_row_height);
 
                 $(".navigrid-items").append('<div class="navigrid-item ui-corner-all"></div>');
@@ -241,6 +247,12 @@ function navigate_pixabay_images_request()
                     $(".navigrid-item-info:last").append('<div class="navigrid-item-info-get"><i class="fa fa-2x fa-expand"></i><br /><br />'+img.imageWidth+' x '+img.imageHeight+'</div>');
                 else
                     $(".navigrid-item-info:last").append('<div class="navigrid-item-info-get"><i class="fa fa-2x fa-download"></i><br /><br />'+img.imageWidth+' x '+img.imageHeight+'</div>');
+
+                if(!img.tags) // high resolution calls do not retrieve tags
+                    img.tags = "";
+
+                if(!img.pageURL)
+                    img.pageURL = 'https://pixabay.com/goto/' + img.id_hash;
 
                 $(".navigrid-item-info:last").append('<div class="navigrid-item-info-author"><a href="https://pixabay.com/users/'+img.user+'" target="_blank">'+img.user+'</a> @ <a href="'+img.pageURL+'" target="_blank">Pixabay</a></div>');
                 $(".navigrid-items .navigrid-item:last").append('<img src="'+img.previewURL+'" data-webformat-url="'+img.webformatURL+'" data-infopage-url="'+img.pageURL+'" data-tags="'+img.tags+'"  />');

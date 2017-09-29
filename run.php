@@ -25,12 +25,16 @@ function pixabay_images_run()
 
                 case 'download':
                     // try to get the image in High resolution (requires full api access with Pixabay approval)
-                    $data = $pixabay->get(intval($_REQUEST['id']), true);
-                    if(!isset($data->id))
-                        $data = $pixabay->get(intval($_REQUEST['id']), false);
+                    if(!is_numeric($_REQUEST['id']))
+                        $data = $pixabay->get_high_res($_REQUEST['id']);
+                    else
+                        $data = $pixabay->get(intval($_REQUEST['id']));
 
                     $tags = explode(", ", $data->tags);
-                    $pixabay_file_name = $tags[0]."-pixabay-".$data->id;
+                    if(isset($data->id))
+                        $pixabay_file_name = $tags[0]."-pixabay-".$data->id;
+                    else if(isset($data->id_hash))
+                        $pixabay_file_name = $data->user."-pixabay-".$data->id_hash;
 
                     // check if we already have the image downloaded
                     $existing = file::filesBySearch($pixabay_file_name);
@@ -44,12 +48,12 @@ function pixabay_images_run()
                         $pixabay_file_path = NAVIGATE_PRIVATE . '/' . $website->id . '/files/' . uniqid('pixabay-');
 
                         $image_url = $data->webformatURL;
-                        if (isset($data->imageURL)) // Hi-Res available
+                        if(isset($data->imageURL)) // Hi-Res available
                             $image_url = $data->imageURL;
 
                         core_file_curl($image_url, $pixabay_file_path);
 
-                        if (file_exists($pixabay_file_path) && filesize($pixabay_file_path) > 256)
+                        if(file_exists($pixabay_file_path) && filesize($pixabay_file_path) > 256)
                         {
                             $f = file::register_upload($pixabay_file_path, $pixabay_file_name, 0);
 
@@ -58,6 +62,25 @@ function pixabay_images_run()
                                 $f->title[$language] = $data->user . ' / Pixabay';
                                 $f->description[$language] = $data->tags;
                             }
+
+                            // file details correction (when fileinfo extension is not available)
+                            if($f->type != "image")
+                            {
+                                $f->type = "image";
+                                $f->mime = "image/png"; // we assume all images are PNG, even if that's untrue
+
+                                if($data->imageURL)
+                                {
+                                    $f->width = $data->imageWidth;
+                                    $f->height = $data->imageHeight;
+                                }
+                                else
+                                {
+                                    $f->width = $data->webformatWidth;
+                                    $f->height = $data->webformatHeight;
+                                }
+                            }
+
                             $f->save();
 
                             $f->title = json_encode($f->title);
@@ -86,6 +109,7 @@ function pixabay_images_run()
                     $orientation = value_or_default($_REQUEST['orientation'], 'all');
                     $editors_choice = value_or_default($_REQUEST['editors_choice'], true);
 
+                    // try searching in high resolution
                     $items = $pixabay->search(
                         $text,
                         $page,
@@ -93,8 +117,24 @@ function pixabay_images_run()
                         $order,
                         $type,
                         $orientation,
-                        $editors_choice
+                        $editors_choice,
+                        true
                     );
+
+                    if(!isset($items->totalHits))
+                    {
+                        // high resolution not enabled
+                        $items = $pixabay->search(
+                            $text,
+                            $page,
+                            $per_page,
+                            $order,
+                            $type,
+                            $orientation,
+                            $editors_choice,
+                            false
+                        );
+                    }
 
                     echo json_encode($items);
 

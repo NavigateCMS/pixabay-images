@@ -10,8 +10,7 @@ class pixabay_images
         $this->apikey = $apikey;
     }
 
-    // TODO: implement a full search with additional parameters (safe, min. width/height...)
-    function search($text="", $page=1, $per_page=64, $order="popular", $type="", $orientation="", $editors_choice=false)
+    function search($text="", $page=1, $per_page=64, $order="popular", $type="", $orientation="", $editors_choice=false, $high_resolution=false)
     {
         $url = $this->pixabay_endpoint;
 
@@ -19,6 +18,9 @@ class pixabay_images
         $url.= '&page='.$page;
         $url.= '&per_page='.$per_page;
         $url.= '&order='.$order;
+
+        if($high_resolution)
+            $url.= '&response_group=high_resolution';
 
         if(!empty($text))
             $url.= '&q='.$text;
@@ -56,15 +58,47 @@ class pixabay_images
         return $data;
     }
 
-    function get($id, $high_resolution=false)
+    function get($id)
     {
         // get full image info
         $url = $this->pixabay_endpoint;
         $url.= 'key='.$this->apikey;
         $url.= '&id='.$id;
 
-        if($high_resolution)
-            $url .= '&response_group=high_resolution';
+        $today = strftime("%Y%m%d");
+        $hash = md5($today . '.' . $url);
+
+        $file = 'plugins/pixabay_images/cache/request-'.$today.'-'.$hash;
+
+        if(file_exists($file))
+        {
+            $data = file_get_contents($file);
+            $this->clear_cache();
+        }
+        else
+        {
+            $data = core_curl_post($url);
+
+            if(!empty($data))
+                file_put_contents($file, $data);
+
+            $this->clear_cache();
+        }
+
+        $data = json_decode($data);
+        if(!empty($data->hits))
+            $data = $data->hits[0];
+
+        return $data;
+    }
+
+    function get_high_res($id_hash)
+    {
+        // get full image info
+        $url = $this->pixabay_endpoint;
+        $url.= 'key='.$this->apikey;
+        $url.= '&id='.$id_hash;
+        $url .= '&response_group=high_resolution';
 
         $today = strftime("%Y%m%d");
         $hash = md5($today . '.' . $url);
